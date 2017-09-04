@@ -17,6 +17,7 @@ import java.util.Queue;
  * @author WangNan, nan.wang@htouhui.com
  * @version 1.0
  */
+@SuppressWarnings("all")
 public class SearchBinaryTree<T extends Comparable<T>> {
 
     private BSTNode<T> mRoot;    // 根结点
@@ -171,7 +172,7 @@ public class SearchBinaryTree<T extends Comparable<T>> {
         if (root == null) {
             return false;
         }
-        Queue<BSTNode> queue = new LinkedList<>();
+        Queue<BSTNode> queue = new LinkedList<BSTNode>();
         queue.add(root);
         boolean result = true;
         boolean hasNoChild = false;
