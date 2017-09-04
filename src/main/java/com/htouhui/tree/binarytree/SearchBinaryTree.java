@@ -91,7 +91,6 @@ public class SearchBinaryTree<T extends Comparable<T>> {
     private int numOfTreeNode(BSTNode<T> root) {
         if (root == null) {
             return 0;
-
         }
         int left = numOfTreeNode(root.left);
         int right = numOfTreeNode(root.right);
@@ -107,18 +106,18 @@ public class SearchBinaryTree<T extends Comparable<T>> {
     /**
      * 求二叉树中叶子节点的个数
      */
-    private int numsOfNoChildNode(BSTNode<T> root) {
+    private int numOfNoChildNode(BSTNode<T> root) {
         if (root == null) {
             return 0;
         }
         if (root.left == null && root.right == null) {
             return 1;
         }
-        return numsOfNoChildNode(root.left) + numsOfNoChildNode(root.right);
+        return numOfNoChildNode(root.left) + numOfNoChildNode(root.right);
     }
 
-    public int numsOfNoChildNode() {
-        return numsOfNoChildNode(mRoot);
+    public int numOfNoChildNode() {
+        return numOfNoChildNode(mRoot);
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -126,20 +125,20 @@ public class SearchBinaryTree<T extends Comparable<T>> {
     /**
      * 求二叉树中第k层节点的个数
      */
-    private int numsOfkLevelTreeNode(BSTNode<T> root, int k) {
+    private int numOfkLevelTreeNode(BSTNode<T> root, int k) {
         if (root == null || k < 1) {
             return 0;
         }
         if (k == 1) {
             return 1;
         }
-        int numsLeft = numsOfkLevelTreeNode(root.left, k - 1);
-        int numsRight = numsOfkLevelTreeNode(root.right, k - 1);
-        return numsLeft + numsRight;
+        int numLeft = numOfkLevelTreeNode(root.left, k - 1);
+        int numRight = numOfkLevelTreeNode(root.right, k - 1);
+        return numLeft + numRight;
     }
 
-    public int numsOfkLevelTreeNode(int k) {
-        return numsOfkLevelTreeNode(mRoot, k);
+    public int numOfkLevelTreeNode(int k) {
+        return numOfkLevelTreeNode(mRoot, k);
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -147,16 +146,12 @@ public class SearchBinaryTree<T extends Comparable<T>> {
     /**
      * 判断二叉树是否是平衡二叉树
      */
-    private boolean isBalanced(BSTNode<T> node) {
-        return maxDeath2(node) != -1;
-    }
-
-    private int maxDeath2(BSTNode<T> node) {
+    private int isBalanced(BSTNode<T> node) {
         if (node == null) {
             return 0;
         }
-        int left = maxDeath2(node.left);
-        int right = maxDeath2(node.right);
+        int left = isBalanced(node.left);
+        int right = isBalanced(node.right);
         if (left == -1 || right == -1 || Math.abs(left - right) > 1) {
             return -1;
         }
@@ -164,7 +159,7 @@ public class SearchBinaryTree<T extends Comparable<T>> {
     }
 
     public boolean isBalanced() {
-        return isBalanced(mRoot);
+        return isBalanced(mRoot) != -1;
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -176,7 +171,7 @@ public class SearchBinaryTree<T extends Comparable<T>> {
         if (root == null) {
             return false;
         }
-        Queue<BSTNode> queue = new LinkedList<BSTNode>();
+        Queue<BSTNode> queue = new LinkedList<>();
         queue.add(root);
         boolean result = true;
         boolean hasNoChild = false;
@@ -194,7 +189,6 @@ public class SearchBinaryTree<T extends Comparable<T>> {
                 } else if (current.left != null && current.right == null) {
                     queue.add(current.left);
                     hasNoChild = true;
-
                 } else if (current.left == null && current.right != null) {
                     result = false;
                     break;
@@ -360,8 +354,7 @@ public class SearchBinaryTree<T extends Comparable<T>> {
             else
                 return x;
         }
-
-        return x;
+        return null;
     }
 
     public BSTNode<T> iterativeSearch(T key) {
@@ -474,9 +467,11 @@ public class SearchBinaryTree<T extends Comparable<T>> {
         while (x != null) {
             y = x;
             cmp = z.key.compareTo(x.key);
-            if (cmp < 0)
+            if (cmp == 0)
+                return;
+            else if (cmp < 0)
                 x = x.left;
-            else
+            else if (cmp > 0)
                 x = x.right;
         }
 
@@ -510,17 +505,22 @@ public class SearchBinaryTree<T extends Comparable<T>> {
      * z 删除的结点
      */
     private BSTNode<T> remove(SearchBinaryTree<T> bst, BSTNode<T> z) {
-        BSTNode<T> x = null;
-        BSTNode<T> y = null;
+        if (search(z.key) == null) {
+            throw new RuntimeException("this node doesn't exist.");
+        }
 
+        BSTNode<T> x = null; // 被删除节点
+        BSTNode<T> y = null; // 替换节点
+
+        // 替换节点
         if ((z.left == null) || (z.right == null))
             y = z;
         else
-            y = successor(z); // 查找后继结点
+            y = successor(z);
 
         if (y.left != null)
             x = y.left;
-        else
+        else if (y.right != null)
             x = y.right;
 
         if (x != null)

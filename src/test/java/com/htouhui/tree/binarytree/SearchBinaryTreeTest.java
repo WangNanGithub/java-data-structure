@@ -22,8 +22,8 @@ public class SearchBinaryTreeTest {
         System.out.println("== 依次添加: ");
         iLen = arr.length;
         for (i = 0; i < iLen; i++) {
-            System.out.print(arr[i] + " ");
-            tree.insert(arr[i]);
+            System.out.print(arr[i] * 2 + " ");
+            tree.insert(arr[i] * 2);
         }
         System.out.println();
     }
@@ -40,6 +40,33 @@ public class SearchBinaryTreeTest {
         System.out.println("二叉树最小深度: ");
         int minDeath = tree.minDeath();
         System.out.println(minDeath);
+    }
+
+    @Test
+    public void testNumOfTreeNode() {
+        System.out.println("二叉树节点个数: ");
+        int numOfTreeNode = tree.numOfTreeNode();
+        System.out.println(numOfTreeNode);
+    }
+
+    @Test
+    public void testNumOfNoChildNode() {
+        int numOfNoChildNode = tree.numOfNoChildNode();
+        System.out.printf("二叉树叶子节点个数 : %d \n", numOfNoChildNode);
+    }
+
+    @Test
+    public void numOfkLevelTreeNode() {
+        int death = tree.maxDeath();
+        for (int i = 1; i <= death; i++) {
+            int numOfkLevelTreeNode = tree.numOfkLevelTreeNode(i);
+            System.out.printf("二叉树第 %d 层节点个数 : %d \n", i, numOfkLevelTreeNode);
+        }
+    }
+
+    @Test
+    public void isBalanced() {
+        System.out.printf("二叉树是否是平衡二叉树 : %s", tree.isBalanced());
     }
 
     @Test
@@ -68,6 +95,7 @@ public class SearchBinaryTreeTest {
             for (Integer integer : list) {
                 System.out.print(integer + " ");
             }
+            System.out.println();
         }
     }
 
@@ -110,7 +138,22 @@ public class SearchBinaryTreeTest {
         System.out.println(successor.getKey());
     }
 
+    @Test
     public void testInsert() throws Exception {
+        System.out.println("before insert");
+        tree.print();
+
+        // 二叉树失衡
+        for (int i = 0; i < 100; i++) {
+            SearchBinaryTree<Integer>.BSTNode<Integer> node = tree.search(i);
+            if (node == null) {
+                tree.insert(i);
+            }
+        }
+
+        System.out.println("after insert");
+        tree.print();
+
     }
 
     @Test
@@ -126,7 +169,13 @@ public class SearchBinaryTreeTest {
     public void testClear() throws Exception {
     }
 
+    @Test
     public void testPrint() throws Exception {
+        tree.insert(13);
+        tree.print();
+
+        tree.remove(12);
+        tree.print();
     }
 
 }
