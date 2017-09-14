@@ -8,8 +8,11 @@
 package com.htouhui.tree.binarytree;
 
 /**
+ * <p>AVL 树</p>
+ *
  * @author WangNan, nan.wang@htouhui.com
  * @version 1.0
+ * @date 2017年09月04日
  */
 @SuppressWarnings("all")
 public class AVLTree<T extends Comparable<T>> {

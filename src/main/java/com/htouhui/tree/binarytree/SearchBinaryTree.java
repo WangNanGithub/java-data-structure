@@ -12,10 +12,11 @@ import java.util.LinkedList;
 import java.util.Queue;
 
 /**
- * 二叉树
+ * <p>二叉树(二叉查找树)</p>
  *
  * @author WangNan, nan.wang@htouhui.com
  * @version 1.0
+ * @date 2017年09月04日
  */
 @SuppressWarnings("all")
 public class SearchBinaryTree<T extends Comparable<T>> {

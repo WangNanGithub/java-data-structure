@@ -6,16 +6,15 @@ import org.junit.Before;
  * @author WangNan, nan.wang@htouhui.com
  * @version 1.0
  */
-public class RBTreeTest {
+public class RedBlackTreeTest {
 
     private static final int a[] = {10, 40, 30, 60, 90, 70, 20, 50, 80};
     private static final boolean mDebugInsert = false;    // "插入"动作的检测开关(false，关闭；true，打开)
     private static final boolean mDebugDelete = false;    // "删除"动作的检测开关(false，关闭；true，打开)
 
-    @Before
-    public void setUp() throws Exception {
+    public void test() {
         int i, ilen = a.length;
-        RBTree<Integer> tree = new RBTree<Integer>();
+        RedBlackTree<Integer> tree = new RedBlackTree<Integer>();
 
         System.out.printf("== 原始数据: ");
         for (i = 0; i < ilen; i++)
@@ -63,6 +62,21 @@ public class RBTreeTest {
 
         // 销毁二叉树
         tree.clear();
+    }
+
+    @Before
+    public void setUp() throws Exception {
+        int a[] = {80, 40, 120, 60, 90, 70, 20, 50, 80};
+        for (i = 0; i < ilen; i++) {
+            tree.insert(a[i]);
+            // 设置mDebugInsert=true,测试"添加函数"
+            if (mDebugInsert) {
+                System.out.printf("== 添加节点: %d\n", a[i]);
+                System.out.printf("== 树的详细信息: \n");
+                tree.print();
+                System.out.printf("\n");
+            }
+        }
     }
 
 }
