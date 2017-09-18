@@ -66,6 +66,14 @@ public class RedBlackTreeTest {
 
     @Before
     public void setUp() throws Exception {
+        int i, ilen = a.length;
+        RedBlackTree<Integer> tree = new RedBlackTree<Integer>();
+
+        System.out.printf("== 原始数据: ");
+        for (i = 0; i < ilen; i++)
+            System.out.printf("%d ", a[i]);
+        System.out.printf("\n");
+
         int a[] = {80, 40, 120, 60, 90, 70, 20, 50, 80};
         for (i = 0; i < ilen; i++) {
             tree.insert(a[i]);
