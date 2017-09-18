@@ -7,10 +7,8 @@
  */
 package com.htouhui.dg;
 
-import java.io.IOException;
 import java.util.LinkedList;
 import java.util.Queue;
-import java.util.Scanner;
 
 /**
  * 邻接表 有向图
@@ -38,51 +36,6 @@ public class ListDG {
     private int mEdgNum;    // 边的数量
 
     /*
-     * 创建图(自己输入数据)
-     */
-    public ListDG() {
-
-        // 输入"顶点数"和"边数"
-        System.out.printf("input vertex number: ");
-        int vlen = readInt();
-        System.out.printf("input edge number: ");
-        int elen = readInt();
-        if (vlen < 1 || elen < 1 || (elen > (vlen * (vlen - 1)))) {
-            System.out.printf("input error: invalid parameters!\n");
-            return;
-        }
-
-        // 初始化"顶点"
-        mVexs = new VNode[vlen];
-        for (int i = 0; i < mVexs.length; i++) {
-            System.out.printf("vertex(%d): ", i);
-            mVexs[i] = new VNode();
-            mVexs[i].data = readChar();
-            mVexs[i].firstEdge = null;
-        }
-
-        // 初始化"边"
-        //mMatrix = new int[vlen][vlen];
-        mEdgNum = elen;
-        for (int i = 0; i < elen; i++) {
-            // 读取边的起始顶点和结束顶点
-            System.out.printf("edge(%d):", i);
-            char c1 = readChar();
-            char c2 = readChar();
-            int p1 = getPosition(c1);
-            int p2 = getPosition(c2);
-            // 初始化node1
-            ENode node1 = new ENode();
-            node1.ivex = p2;
-            // 将node1链接到"p1所在链表的末尾"
-            if (mVexs[p1].firstEdge == null)
-                mVexs[p1].firstEdge = node1;
-            else
-                linkLast(mVexs[p1].firstEdge, node1);
-        }
-    }
-
-    /*
      * 创建图(用已提供的矩阵)
      *
      * 参数说明：
@@ -108,7 +61,7 @@ public class ListDG {
             // 读取边的起始顶点和结束顶点
             char c1 = edges[i][0];
             char c2 = edges[i][1];
-            // 读取边的起始顶点和结束顶点
+            // 读取边的起始顶点和结束顶点的位置
             int p1 = getPosition(edges[i][0]);
             int p2 = getPosition(edges[i][1]);
 
@@ -145,31 +98,6 @@ public class ListDG {
     }
 
     /*
-     * 读取一个输入字符
-     */
-    private char readChar() {
-        char ch = '0';
-
-        do {
-            try {
-                ch = (char) System.in.read();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        } while (!((ch >= 'a' && ch <= 'z') || (ch >= 'A' && ch <= 'Z')));
-
-        return ch;
-    }
-
-    /*
-     * 读取一个输入字符
-     */
-    private int readInt() {
-        Scanner scanner = new Scanner(System.in);
-        return scanner.nextInt();
-    }
-
-    /*
      * 打印矩阵队列图
      */
     public void print() {
@@ -200,13 +128,12 @@ public class ListDG {
         char[] tops;             // 拓扑排序结果数组，记录每个节点的排序后的序号。
         Queue<Integer> queue;    // 辅组队列
 
-        ins   = new int[num];
-        tops  = new char[num];
+        ins = new int[num];
+        tops = new char[num];
         queue = new LinkedList<Integer>();
 
         // 统计每个顶点的入度数
-        for(int i = 0; i < num; i++) {
-
+        for (int i = 0; i < num; i++) {
             ENode node = mVexs[i].firstEdge;
             while (node != null) {
                 ins[node.ivex]++;
@@ -215,43 +142,43 @@ public class ListDG {
         }
 
         // 将所有入度为0的顶点入队列
-        for(int i = 0; i < num; i ++)
-            if(ins[i] == 0)
+        for (int i = 0; i < num; i++)
+            if (ins[i] == 0)
                 queue.offer(i);                 // 入队列
 
         while (!queue.isEmpty()) {              // 队列非空
             int j = queue.poll().intValue();    // 出队列。j是顶点的序号
-            tops[index++] = mVexs[j].data;  // 将该顶点添加到tops中，tops是排序结果
-            ENode node = mVexs[j].firstEdge;// 获取以该顶点为起点的出边队列
+            tops[index++] = mVexs[j].data;      // 将该顶点添加到tops中，tops是排序结果
+            ENode node = mVexs[j].firstEdge;    // 获取以该顶点为起点的出边队列
 
             // 将与"node"关联的节点的入度减1；
             // 若减1之后，该节点的入度为0；则将该节点添加到队列中。
-            while(node != null) {
+            while (node != null) {
                 // 将节点(序号为node.ivex)的入度减1。
                 ins[node.ivex]--;
                 // 若节点的入度为0，则将其"入队列"
-                if( ins[node.ivex] == 0)
+                if (ins[node.ivex] == 0)
                     queue.offer(node.ivex);    // 入队列
 
                 node = node.nextEdge;
             }
         }
 
-        if(index != num) {
+        if (index != num) {
             System.out.printf("Graph has a cycle\n");
             return 1;
         }
 
         // 打印拓扑排序结果
         System.out.printf("== TopSort: ");
-        for(int i = 0; i < num; i ++)
+        for (int i = 0; i < num; i++)
             System.out.printf("%c ", tops[i]);
         System.out.printf("\n");
 
         return 0;
     }
 
-    /*
+    /**
      * 克鲁斯卡尔（Kruskal)最小生成树
      */
     public void kruskal() {
@@ -265,7 +192,7 @@ public class ListDG {
         // 将边按照"权"的大小进行排序(从小到大)
         sortEdges(edges, mEdgNum);
 
-        for (int i=0; i<mEdgNum; i++) {
+        for (int i = 0; i < mEdgNum; i++) {
             int p1 = getPosition(edges[i].start);       // 获取第i条边的"起点"的序号
             int p2 = getPosition(edges[i].end);         // 获取第i条边的"终点"的序号
 
@@ -292,11 +219,11 @@ public class ListDG {
      * 获取图中的边
      */
     private EData[] getEdges() {
-        int index=0;
+        int index = 0;
         EData[] edges;
 
         edges = new EData[mEdgNum];
-        for (int i=0; i < mVexs.length; i++) {
+        for (int i = 0; i < mVexs.length; i++) {
 
             ENode node = mVexs[i].firstEdge;
             while (node != null) {
@@ -315,8 +242,8 @@ public class ListDG {
      */
     private void sortEdges(EData[] edges, int elen) {
 
-        for (int i=0; i<elen; i++) {
-            for (int j=i+1; j<elen; j++) {
+        for (int i = 0; i < elen; i++) {
+            for (int j = i + 1; j < elen; j++) {
 
                 if (edges[i].weight > edges[j].weight) {
                     // 交换"边i"和"边j"
@@ -348,7 +275,9 @@ public class ListDG {
             this.end = end;
             this.weight = weight;
         }
-    };
+    }
+
+    ;
 
     public static void main(String[] args) {
         char[] vexs = {'A', 'B', 'C', 'D', 'E', 'F', 'G'};

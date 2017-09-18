@@ -7,9 +7,6 @@
  */
 package com.htouhui.dg;
 
-import java.io.IOException;
-import java.util.Scanner;
-
 /**
  * 邻接表 无向图
  *
@@ -32,59 +29,6 @@ public class ListUDG {
     }
 
     private VNode[] mVexs;  // 顶点数组
-
-
-    /*
-     * 创建图(自己输入数据)
-     */
-    public ListUDG() {
-
-        // 输入"顶点数"和"边数"
-        System.out.printf("input vertex number: ");
-        int vlen = readInt();
-        System.out.printf("input edge number: ");
-        int elen = readInt();
-        if (vlen < 1 || elen < 1 || (elen > (vlen * (vlen - 1)))) {
-            System.out.printf("input error: invalid parameters!\n");
-            return;
-        }
-
-        // 初始化"顶点"
-        mVexs = new VNode[vlen];
-        for (int i = 0; i < mVexs.length; i++) {
-            System.out.printf("vertex(%d): ", i);
-            mVexs[i] = new VNode();
-            mVexs[i].data = readChar();
-            mVexs[i].firstEdge = null;
-        }
-
-        // 初始化"边"
-        //mMatrix = new int[vlen][vlen];
-        for (int i = 0; i < elen; i++) {
-            // 读取边的起始顶点和结束顶点
-            System.out.printf("edge(%d):", i);
-            char c1 = readChar();
-            char c2 = readChar();
-            int p1 = getPosition(c1);
-            int p2 = getPosition(c2);
-            // 初始化node1
-            ENode node1 = new ENode();
-            node1.ivex = p2;
-            // 将node1链接到"p1所在链表的末尾"
-            if (mVexs[p1].firstEdge == null)
-                mVexs[p1].firstEdge = node1;
-            else
-                linkLast(mVexs[p1].firstEdge, node1);
-            // 初始化node2
-            ENode node2 = new ENode();
-            node2.ivex = p1;
-            // 将node2链接到"p2所在链表的末尾"
-            if (mVexs[p2].firstEdge == null)
-                mVexs[p2].firstEdge = node2;
-            else
-                linkLast(mVexs[p2].firstEdge, node2);
-        }
-    }
 
     /*
      * 创建图(用已提供的矩阵)
@@ -131,7 +75,6 @@ public class ListUDG {
                 mVexs[p2].firstEdge = node2;
             else
                 linkLast(mVexs[p2].firstEdge, node2);
-
         }
     }
 
@@ -154,31 +97,6 @@ public class ListUDG {
             if (mVexs[i].data == ch)
                 return i;
         return -1;
-    }
-
-    /*
-     * 读取一个输入字符
-     */
-    private char readChar() {
-        char ch = '0';
-
-        do {
-            try {
-                ch = (char) System.in.read();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        } while (!((ch >= 'a' && ch <= 'z') || (ch >= 'A' && ch <= 'Z')));
-
-        return ch;
-    }
-
-    /*
-     * 读取一个输入字符
-     */
-    private int readInt() {
-        Scanner scanner = new Scanner(System.in);
-        return scanner.nextInt();
     }
 
     /*
